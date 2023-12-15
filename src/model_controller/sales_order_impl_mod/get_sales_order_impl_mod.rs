@@ -5,17 +5,15 @@ use odbc_api::{
 };
 use std::sync::Arc;
 
-use crate::error_mod::*;
+use crate::{error_mod::*, routers::sales_order_router_mod::model_mod::{Customer, Item, ColorCoat}};
 use crate::{
     model_controller::ModelController,
-    routers::sales_order_router_mod::get_router_mod::{
-        model_mod::Customer, trait_mod::SalesOrderGet,
-    },
+    routers::sales_order_router_mod::get_router_mod::trait_mod::SalesOrderGet,
 };
 
 #[async_trait]
 impl SalesOrderGet for ModelController {
-    async fn get_customers(&self) -> Result<String> {
+    async fn get_customers(&self) -> Result<Vec<Customer>> {
         let env = Arc::clone(&self.get_env());
         let conn =
             env.connect_with_connection_string(&self.get_con_str(), ConnectionOptions::default())?;
@@ -57,12 +55,29 @@ impl SalesOrderGet for ModelController {
             init_val += buff_size;
         }
 
-        // TODO Implement Logic on Creatin Customer
+        let mut res_vec = Vec::new();
+        if looping_vec.len() != 0 {
+            // TODO Implement Logic on Creatin Customer
+            for i in 0..looping_vec[0].len() {
+                let id = looping_vec[0][i].clone();
+                let name = looping_vec[1][i].clone();
+                let addr = looping_vec[2][i].clone();
+                let cont_pers = looping_vec[3][i].clone();
+                let tin = looping_vec[4][i].clone();
+                let tel_no = looping_vec[5][i].clone();
+                let est = looping_vec[6][i].clone();
+                let deliv_addr =looping_vec[7][i].clone();
+                let email = looping_vec[8][i].clone();
 
-        Ok(format!("{:?}", looping_vec))
+                let cust = Customer::new(id, name, addr, cont_pers, tin, tel_no, est, deliv_addr, email);
+                res_vec.push(cust);
+            }
+        }        
+
+        Ok(res_vec)
     }
 
-    async fn get_items(&self) -> Result<String> {
+    async fn get_items(&self) -> Result<Vec<Item>> {
         let env = Arc::clone(&self.get_env());
         let conn =
             env.connect_with_connection_string(&self.get_con_str(), ConnectionOptions::default())?;
@@ -103,12 +118,22 @@ impl SalesOrderGet for ModelController {
             init_val += buff_size;
         }
 
-        // TODO: Implement management of result
+        let mut res_vec = Vec::new();
+        if looping_vec.len() != 0 {
+            // TODO Implement Logic on Creatin Customer
+            for i in 0..looping_vec[0].len() {
+                let id = looping_vec[0][i].clone();
+                let name = looping_vec[1][i].clone();
 
-        Ok(String::new())
+                let item = Item::new(id, name);
+                res_vec.push(item);
+            }
+        }              
+
+        Ok(res_vec)
     }
 
-    async fn get_color_coats(&self) -> Result<String> {
+    async fn get_color_coats(&self) -> Result<Vec<ColorCoat>> {
         let env = Arc::clone(&self.get_env());
         let conn =
             env.connect_with_connection_string(&self.get_con_str(), ConnectionOptions::default())?;
@@ -149,8 +174,17 @@ impl SalesOrderGet for ModelController {
             init_val += buff_size;
         }
 
-        // TODO: Implement management of result
+        let mut res_vec = Vec::new();
+        if looping_vec.len() != 0 {
+            for i in 0..looping_vec.len() {
+                let id = looping_vec[0][i].clone();
+                let color_coat = looping_vec[1][i].clone();
+    
+                let color_coats = ColorCoat::new(id, color_coat);
+                res_vec.push(color_coats);
+            }
+        }
 
-        Ok(String::new())
+        Ok(res_vec)
     }
 }

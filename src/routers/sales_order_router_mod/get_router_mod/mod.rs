@@ -1,12 +1,11 @@
 use axum::{routing::get, Router};
 
 use crate::{
-    appstate_mod::AppState, model_controller::ModelController,
+    appstate_mod::AppState,
     routers::sales_order_router_mod::get_router_mod::handler_mod::*,
 };
 
 mod handler_mod;
-pub mod model_mod;
 pub mod trait_mod;
 
 pub fn get_router() -> Router<AppState> {

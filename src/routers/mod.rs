@@ -19,14 +19,10 @@ pub fn main_router() -> Result<Router> {
     let mc = ModelController::new(String::from(CON_STR))?;
     let app_state = AppState::new(mc.clone())?;
 
-    let routes_api = Router::new()
-        .nest("/sales_order_route", sales_order_router())
-        .route_layer(middleware::from_fn(mw_require_auth));
-
     Ok(Router::new()
-        .nest("/test_route", test_router())
-        .nest("/login_route", login_router())
-        .merge(routes_api)
+        //.nest("/test_route", test_router())
+        //.nest("/login_route", login_router())
+        .nest("/sales_order_route", sales_order_router())
         .with_state(app_state)
         .layer(middleware::map_response(main_response_mapper))
         .layer(CookieManagerLayer::new()))
