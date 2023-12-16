@@ -36,7 +36,7 @@ impl SalesOrderPost for ModelController {
                 &cust.get_deliv_addr().into_parameter(),
                 &cust.get_email().into_parameter(),
             ),
-        )?;
+        ).unwrap();
         println!("pass2");
 
         Ok(cust)
